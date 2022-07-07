@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="1">Отправить данные</button>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"
+      integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+      integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var socket = io('http://localhost:3000');
+
+      var button = document.getElementById('1');
+      button.addEventListener('click', function (e) {
+        socket.emit('joinQueue', { id: uuid.v4(), rank: Math.floor(Math.random() * 1000) });
+      });
+
+      socket.on('newUser', (person) => {
+        console.log('Новый игрок в лобби: ' + person.id);
+        console.log('Ранк игрока: ' + person.rank);
+      });
+
+      socket.on('message', (message) => {
+        console.log(message);
+      })
+    </script>
+  </body>
+</html>
